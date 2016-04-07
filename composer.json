@@ -1,0 +1,11 @@
+{
+  "name": "qwestern/easyii-menu-module",
+  "requires" :{
+    "noumo/easyii": "dev-master"
+  },
+  "autoload": {
+    "psr-4": {
+      "qwestern\\easyii\\menu": "src/"
+    }
+  }
+}
