@@ -1,5 +1,6 @@
 {
   "name": "qwestern/easyii-menu-module",
+  "type": "yii2-extension",
   "requires" :{
     "noumo/easyii": "dev-master"
   },
