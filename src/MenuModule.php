@@ -1,10 +1,10 @@
 <?php
 namespace qwestern\easyii\menu;
 
-
 use yii\easyii\components\Module;
 
-class MenuModule extends Module{
+class MenuModule extends Module
+{
     public static $installConfig = [
         'title' => [
             'en' => 'Menu',

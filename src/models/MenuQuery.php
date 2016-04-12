@@ -7,7 +7,11 @@ use yii\db\ActiveQuery;
 
 class MenuQuery extends ActiveQuery
 {
-    public function behaviors() {
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
         return [
             NestedSetsQueryBehavior::className(),
         ];

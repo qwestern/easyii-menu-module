@@ -9,8 +9,8 @@ use yii\web\NotFoundHttpException;
 
 class AController extends Controller
 {
-    public function actionIndex() {
-
+    public function actionIndex()
+    {
         $dataProvider = new ActiveDataProvider(['query' => Menu::find()]);
 
         return $this->render('index', [
@@ -18,9 +18,10 @@ class AController extends Controller
         ]);
     }
 
-    public function actionCreate() {
+    public function actionCreate()
+    {
         $model = new Menu();
-        if($model->load(Yii::$app->request->post()) && $model->save()){
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
         }
         return $this->render('create', [
@@ -28,10 +29,11 @@ class AController extends Controller
         ]);
     }
 
-    function actionUpdate($id) {
+    public function actionUpdate($id)
+    {
         $model = $this->getModel($id);
 
-        if($model->load(Yii::$app->request->post()) && $model->save()){
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
         }
         return $this->render('edit', [
@@ -39,8 +41,9 @@ class AController extends Controller
         ]);
     }
 
-    public function getModel($id) {
-        if($item = Menu::findOne($id)) {
+    public function getModel($id)
+    {
+        if ($item = Menu::findOne($id)) {
             return $item;
         }
         throw new NotFoundHttpException();

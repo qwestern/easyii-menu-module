@@ -1,16 +1,22 @@
 <?php
+use yii\helpers\Html;
+use yii\grid\GridView;
+use yii\grid\ActionColumn;
 
+/**
+ * @var yii\data\ActiveDataProvider $dataProvider
+ */
 ?>
 
-<?= \yii\helpers\Html::a('Create menu', ['create']) ?>
+<?= Html::a('Create menu', ['create']) ?>
 
-<?= \yii\grid\GridView::widget([
+<?= GridView::widget([
     'dataProvider' => $dataProvider,
     'columns' => [
         'name',
         'slug',
         [
-            'class' => \yii\grid\ActionColumn::className()
+            'class' => ActionColumn::className()
         ]
     ]
-]); ?>
+]);

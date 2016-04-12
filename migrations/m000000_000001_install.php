@@ -2,7 +2,8 @@
 
 class m000000_000001_install extends \yii\db\Migration {
 
-    public function up() {
+    public function up()
+    {
         $this->createTable('easyii_menu', [
             'id' => $this->primaryKey(),
             'name' => $this->string()->notNull(),
@@ -10,7 +11,8 @@ class m000000_000001_install extends \yii\db\Migration {
         ]);
     }
 
-    public function down() {
+    public function down()
+    {
         $this->dropTable('easyii_menu');
     }
 }
