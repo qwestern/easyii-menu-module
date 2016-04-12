@@ -1,0 +1,82 @@
+<?php
+
+use qwestern\easyii\menu\assets\MenuAsset;
+use yii\helpers\Html;
+use yii\helpers\Url;
+
+/* @var $this yii\web\View */
+/* @var $dataProvider yii\data\ActiveDataProvider */
+
+$this->title = 'Menu Items';
+$this->params['breadcrumbs'][] = $this->title;
+
+MenuAsset::register($this);
+?>
+<div class="menu-item-index">
+
+    <h1><?= Html::encode($this->title) ?></h1>
+
+    <p>
+        <?= Html::a('Create Menu Item', ['create'], ['class' => 'btn btn-success']) ?>
+    </p>
+    
+    <div class="row">
+
+        <div class="col-sm-8">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="sortable-container menu-itemes">
+                        <?=
+                        $this->render('links', [
+                            'dataProvider' => $dataProvider,
+                            #'searchParams' => ['parent_id' => ''],
+                        ]);
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    
+</div>
+
+<?php
+$orderUrl = Url::to(['update']);
+$this->registerJs(<<<JS
+$('.sortable').sortable({
+        connectWith: '.sortable',
+        tolerance: 'intersect',
+        delay: 250,
+        stop: function(event, ui) {
+        
+            var itemId = ui.item.find('.sortable-item-content').data('linkid');
+            if(ui.item.parent().parent().hasClass('sortable-container')){
+            var parentId = null;
+            
+            } else {
+            var parentId = ui.item.parent().parent().find('.sortable-item-content').data('linkid');
+            }
+            console.log(parentId);
+
+            $.ajax({
+                type: "PATCH",
+                url: '{$orderUrl}/' + itemId,
+                data: {parent_id: parentId},
+                success: function(data){
+                    $('.menu-link-alert').hide().filter('.alert-info').show();
+                    setTimeout(function(){
+                        $('.menu-link-alert').hide();
+                    }, 1500);
+                },
+                error: function(data){
+                    $('.menu-link-alert').hide().filter('.alert-danger').show();
+                    setTimeout(function(){
+                        $('.menu-link-alert').hide();
+                    }, 1500);
+                },
+            });
+        },
+    });
+JS
+);
