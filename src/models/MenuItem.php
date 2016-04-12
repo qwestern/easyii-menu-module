@@ -9,14 +9,19 @@ use Yii;
  * This is the model class for table "easyii_menu_item".
  *
  * @property integer $id
- * @property integer $menu_url_id
  * @property integer $lft
  * @property integer $rgt
  * @property integer $depth
  * @property integer $menu_id
+ * @property string  $name
+ * @property string  $url
  */
 class MenuItem extends \yii\db\ActiveRecord
 {
+    use NestedActiveRecordTrait;
+
+    public $parent = null;
+
     /**
      * @inheritdoc
      */
@@ -31,19 +36,32 @@ class MenuItem extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['menu_url_id', 'lft', 'rgt', 'depth', 'menu_id'], 'required'],
-            [['menu_url_id', 'lft', 'rgt', 'depth', 'menu_id'], 'integer'],
+            [['lft', 'rgt', 'depth'], 'default', 'value' => 0],
+            [['name', 'url', 'lft', 'rgt', 'depth', 'menu_id'], 'required'],
+            [['name', 'url'], 'string', 'max' => 255],
+            [['lft', 'rgt', 'depth', 'menu_id', 'parent'], 'integer'],
         ];
     }
-    
-    public function behaviors()
-    {
+
+    public function behaviors() {
         return [
             'tree' => [
-            'class' => NestedSetsBehavior::className(),
-            'treeAttribute' => 'tree'
-        ]
+                'class'         => NestedSetsBehavior::className(),
+                'treeAttribute' => 'menu_id'
+            ]
         ];
+    }
+
+    public function transactions()
+    {
+        return [
+            self::SCENARIO_DEFAULT => self::OP_ALL,
+        ];
+    }
+
+    public static function find()
+    {
+        return new MenuQuery(get_called_class());
     }
 
     /**
@@ -53,7 +71,8 @@ class MenuItem extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'menu_url_id' => 'Menu Url ID',
+            'name' => 'Name',
+            'url' => 'Url',
             'lft' => 'Lft',
             'rgt' => 'Rgt',
             'depth' => 'Depth',
@@ -67,15 +86,5 @@ class MenuItem extends \yii\db\ActiveRecord
     public function getMenu()
     {
         return $this->hasOne(Menu::className(), ['id' => 'menu_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getMenuItem()
-    {
-        return $this->hasOne(MenuUrl::className(), ['id' => 'menu_url_id']);
-    }
-
-    
+    }    
 }
