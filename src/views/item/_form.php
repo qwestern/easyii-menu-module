@@ -19,7 +19,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'url')->textInput() ?>
 
-    <?= $form->field($model, 'parent')->dropDownList(ArrayHelper::merge(['' => 'No parent'], ArrayHelper::map(MenuItem::find()->where(['menu_id' => $model->menu_id])->all(), 'primaryKey', 'name'))) ?>
+    <?= $form->field($model, 'parent')->dropDownList(ArrayHelper::merge(['' => 'No parent'], ArrayHelper::map($children, 'primaryKey', 'name'))) ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
