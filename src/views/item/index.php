@@ -17,7 +17,7 @@ MenuAsset::register($this);
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Menu Item', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Menu Item', ['create', 'id' => $id], ['class' => 'btn btn-success']) ?>
     </p>
     
     <div class="row">

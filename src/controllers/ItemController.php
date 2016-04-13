@@ -2,6 +2,7 @@
 
 namespace qwestern\easyii\menu\controllers;
 
+use qwestern\easyii\menu\models\Menu;
 use Yii;
 use qwestern\easyii\menu\models\MenuItem;
 use yii\data\ActiveDataProvider;
@@ -34,15 +35,16 @@ class ItemController extends Controller
      * Lists all MenuItem models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($id)
     {
 
         $dataProvider = new ActiveDataProvider([
-            'query' => MenuItem::find()->roots(),
+            'query' => MenuItem::find()->where(['menu_id' => $id])->roots(),
         ]);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
+            'id' => $id,
         ]);
     }
 
@@ -63,9 +65,11 @@ class ItemController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($id)
     {
-        $model = new MenuItem();
+        $model = new MenuItem([
+            'menu_id' => $id,
+        ]);
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if(!$model->parent) {
@@ -75,7 +79,7 @@ class ItemController extends Controller
                 $model->appendTo($parent);
             }
 
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index', 'id' => $id]);
         } else {
             return $this->render('create', [
                 'model' => $model,

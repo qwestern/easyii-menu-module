@@ -13,10 +13,17 @@ use yii\grid\ActionColumn;
 <?= GridView::widget([
     'dataProvider' => $dataProvider,
     'columns' => [
-        'name',
+        'name' => [
+            'attribute' => 'name',
+            'value' => function ($model) {
+                return Html::a($model->name, ['/admin/menu/item', 'id' => $model->primaryKey]);
+            },
+            'format' => 'html',
+        ],
         'slug',
         [
-            'class' => ActionColumn::className()
+            'class' => ActionColumn::className(),
+            'template' => '{update} {delete}'
         ]
     ]
 ]);
