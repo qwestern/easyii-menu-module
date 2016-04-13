@@ -51,18 +51,19 @@ $('.sortable').sortable({
         stop: function(event, ui) {
         
             var itemId = ui.item.find('.sortable-item-content').data('linkid');
-            if(ui.item.parent().parent().hasClass('sortable-container')){
-            var parentId = null;
-            
-            } else {
-            var parentId = ui.item.parent().parent().find('.sortable-item-content').data('linkid');
+            var parentId = {$id};
+            if(!ui.item.parent().parent().hasClass('sortable-container')){
+                parentId = ui.item.parent().parent().find('.sortable-item-content').data('linkid');
             }
-            console.log(parentId);
+            var prevItemId = null;
+            if(ui.item.prev()) {
+                prevItemId = ui.item.prev().find('.sortable-item-content').data('linkid')
+            }
 
             $.ajax({
                 type: "PATCH",
                 url: '{$orderUrl}/' + itemId,
-                data: {parent_id: parentId},
+                data: {parent_id: parentId, previous_id: prevItemId},
                 success: function(data){
                     $('.menu-link-alert').hide().filter('.alert-info').show();
                     setTimeout(function(){

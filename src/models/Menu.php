@@ -1,50 +1,59 @@
 <?php
+
 namespace qwestern\easyii\menu\models;
 
 use Yii;
 use yii\behaviors\SluggableBehavior;
-use \yii\easyii\components\ActiveRecord;
+use yii\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "easyii_menu".
+ * This is the model class for table "easyii_menu_item".
  *
- * @property string $name
- * @property string $slug
+ * @property integer $id
+ * @property integer $lft
+ * @property integer $rgt
+ * @property integer $depth
+ * @property integer $tree
+ * @property string  $name
+ * @property string  $url
  */
-class Menu extends ActiveRecord
+class Menu extends MenuItem
 {
 
-    /**
-     * @inheritdoc
-     */
-    public static function tableName()
+    public function behaviors()
     {
-        return 'easyii_menu';
+        return ArrayHelper::merge(parent::behaviors(), [
+            [
+                'class' => SluggableBehavior::className(),
+                'slugAttribute' => 'url',
+                'attribute' => 'name',
+            ],
+        ]);
     }
 
-    /**
-     * @inheritdoc
-     */
     public function rules()
     {
         return [
-            [['name'], 'required'],
-            [['slug'], 'match', 'pattern' => self::$SLUG_PATTERN, 'message' => Yii::t('easyii', 'Slug can contain only 0-9, a-z and "-" characters (max: 128).')],
-            [['slug'], 'unique'],
+            [['lft', 'rgt', 'depth', 'tree'], 'default', 'value' => 0],
+            [['name', 'lft', 'rgt', 'depth'], 'required'],
+            [['name', 'url'], 'string', 'max' => 255],
+            [['lft', 'rgt', 'depth', 'parent'], 'integer'],
+            [['url'], 'safe'],
         ];
     }
 
     /**
      * @inheritdoc
      */
-    public function behaviors()
+    public function attributeLabels()
     {
         return [
-            'sluggable' => [
-                'class' => SluggableBehavior::className(),
-                'attribute' => 'name',
-                'ensureUnique' => true
-            ]
+            'id' => 'ID',
+            'name' => 'Name',
+            'url' => 'Slug',
+            'lft' => 'Lft',
+            'rgt' => 'Rgt',
+            'depth' => 'Depth',
         ];
     }
 
