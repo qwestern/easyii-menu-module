@@ -56,4 +56,14 @@ class Menu extends MenuItem
             'depth' => 'Depth',
         ];
     }
+
+    public function getMenuItems()
+    {
+        return $this->hasMany(MenuItem::className(), ['menu_id' => 'id']);
+    }
+
+    public function getRoots()
+    {
+        return $this->getMenuItems()->roots();
+    }
 }
