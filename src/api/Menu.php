@@ -1,7 +1,7 @@
 <?php 
 
 namespace qwestern\easyii\menu\api;
-use qwestern\easyii\menu\models\Menu as MenuModel;
+use qwestern\easyii\menu\models\MenuItem;
 use yii\widgets\Menu as MenuWidget;
 
 /**
@@ -11,9 +11,9 @@ class Menu extends \yii\easyii\components\API
 {
     public function api_items($slug)
     {
-        $menu = MenuModel::find()->where(['slug'=>$slug])->with('roots')->one();
+        $menu = MenuItem::find()->where(['url'=>$slug])->one();
 
-        return $this->formatItem($menu->roots);
+        return $this->formatItem($menu->children);
     }
 
     public function api_menu($slug)
