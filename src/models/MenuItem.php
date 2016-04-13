@@ -13,7 +13,6 @@ use Yii;
  * @property integer $rgt
  * @property integer $depth
  * @property integer $tree
- * @property integer $menu_id
  * @property string  $name
  * @property string  $url
  */
@@ -38,13 +37,14 @@ class MenuItem extends \yii\db\ActiveRecord
     {
         return [
             [['lft', 'rgt', 'depth', 'tree'], 'default', 'value' => 0],
-            [['name', 'url', 'lft', 'rgt', 'depth', 'menu_id'], 'required'],
+            [['name', 'url', 'lft', 'rgt', 'depth'], 'required'],
             [['name', 'url'], 'string', 'max' => 255],
-            [['lft', 'rgt', 'depth', 'menu_id', 'parent'], 'integer'],
+            [['lft', 'rgt', 'depth', 'parent'], 'integer'],
         ];
     }
 
-    public function behaviors() {
+    public function behaviors()
+    {
         return [
             'tree' => [
                 'class'         => NestedSetsBehavior::className(),
@@ -77,15 +77,6 @@ class MenuItem extends \yii\db\ActiveRecord
             'lft' => 'Lft',
             'rgt' => 'Rgt',
             'depth' => 'Depth',
-            'menu_id' => 'Menu ID',
         ];
     }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getMenu()
-    {
-        return $this->hasOne(Menu::className(), ['id' => 'menu_id']);
-    }    
 }

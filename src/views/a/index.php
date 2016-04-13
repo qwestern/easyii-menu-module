@@ -20,7 +20,10 @@ use yii\grid\ActionColumn;
             },
             'format' => 'html',
         ],
-        'slug',
+        'slug' => [
+            'label' => 'Slug',
+            'attribute' => 'url',
+        ],
         [
             'class' => ActionColumn::className(),
             'template' => '{update} {delete}'

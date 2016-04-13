@@ -5,7 +5,7 @@ namespace qwestern\easyii\menu\controllers;
 use qwestern\easyii\menu\models\Menu;
 use Yii;
 use qwestern\easyii\menu\models\MenuItem;
-use yii\data\ActiveDataProvider;
+use yii\data\ArrayDataProvider;
 use yii\easyii\components\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -38,8 +38,9 @@ class ItemController extends Controller
     public function actionIndex($id)
     {
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => MenuItem::find()->where(['menu_id' => $id])->roots(),
+        $rootItem = MenuItem::findOne($id);
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $rootItem->children,
         ]);
 
         return $this->render('index', [
@@ -67,13 +68,12 @@ class ItemController extends Controller
      */
     public function actionCreate($id)
     {
-        $model = new MenuItem([
-            'menu_id' => $id,
-        ]);
+        $model = new MenuItem();
+        $parent = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if(!$model->parent) {
-                $model->makeRoot();
+            if (!$model->parent) {
+                $model->appendTo($parent);
             } else {
                 $parent = $this->findModel($model->parent);
                 $model->appendTo($parent);
@@ -83,6 +83,7 @@ class ItemController extends Controller
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'children' => $this->findModel($id)->children
             ]);
         }
     }
@@ -98,16 +99,15 @@ class ItemController extends Controller
 
         $model = $this->findModel($id);
 
-        if(Yii::$app->request->isAjax) {
-            $parentId = Yii::$app->request->post('parent_id');
-            if($parentId == $id) {
-                return true;
-            }elseif ($parentId == null) {
-                $model->makeRoot();
-                return true;
+        if (Yii::$app->request->isAjax) {
+            $parent = MenuItem::findOne(Yii::$app->request->post('parent_id'));
+            $previous = MenuItem::findOne(Yii::$app->request->post('previous_id'));
+
+            if ($previous) {
+                $model->insertAfter($previous);
+            } else {
+                $model->prependTo($parent);
             }
-            $parentItem = MenuItem::findOne($parentId);
-            $model->appendTo($parentItem);
 
             Yii::$app->response->format = Response::FORMAT_JSON;
             return true;
@@ -119,6 +119,7 @@ class ItemController extends Controller
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'children' => $this->findModel($id)->children
             ]);
         }
     }
