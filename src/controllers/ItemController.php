@@ -132,9 +132,9 @@ class ItemController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+        $model = $this->findModel($id);
+        $model->deleteWithChildren();
+        return $this->redirect(['index', 'id' => $model->tree]);
     }
 
     /**

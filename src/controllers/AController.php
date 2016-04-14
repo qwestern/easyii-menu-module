@@ -49,4 +49,10 @@ class AController extends Controller
         }
         throw new NotFoundHttpException();
     }
+
+    public function actionDelete($id)
+    {
+        $this->getModel($id)->deleteWithChildren();
+        return $this->redirect(['index']);
+    }
 }

@@ -11,7 +11,6 @@ use yii\widgets\ListView;
     'options' => [
         'tag' => 'ul',
         'class' => 'sortable',
-        #'data-parentid' => (isset($parentId) ? $parentId : null)
     ],
     'itemOptions' => [
         'tag' => 'li',

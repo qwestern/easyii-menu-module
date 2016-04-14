@@ -7,9 +7,13 @@ use yii\helpers\Url;
 /**
  * @var yii\data\ActiveDataProvider $dataProvider
  */
+$this->title = 'Menus';
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<?= Html::a('Create menu', ['create']) ?>
+<p>
+    <?= Html::a('Create menu', ['create'], ['class' => 'btn btn-success']) ?>
+</p>
 
 <?= GridView::widget([
     'dataProvider' => $dataProvider,
