@@ -3,6 +3,7 @@
 use qwestern\easyii\menu\assets\MenuAsset;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -14,8 +15,6 @@ MenuAsset::register($this);
 ?>
 <div class="menu-item-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <p>
         <?= Html::a('Create Menu Item', ['create', 'id' => $id], ['class' => 'btn btn-success']) ?>
     </p>
@@ -25,14 +24,15 @@ MenuAsset::register($this);
         <div class="col-sm-8">
             <div class="panel panel-default">
                 <div class="panel-body">
+                    <?php Pjax::begin() ?>
                     <div class="sortable-container menu-itemes">
                         <?=
                         $this->render('links', [
                             'dataProvider' => $dataProvider,
-                            #'searchParams' => ['parent_id' => ''],
                         ]);
                         ?>
                     </div>
+                    <?php Pjax::end() ?>
                 </div>
             </div>
         </div>

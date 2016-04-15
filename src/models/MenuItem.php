@@ -4,6 +4,7 @@ namespace qwestern\easyii\menu\models;
 
 use creocoder\nestedsets\NestedSetsBehavior;
 use Yii;
+use yii\easyii\behaviors\CacheFlush;
 
 /**
  * This is the model class for table "easyii_menu_item".
@@ -19,6 +20,8 @@ use Yii;
 class MenuItem extends \yii\db\ActiveRecord
 {
     use NestedActiveRecordTrait;
+
+    const CACHE_KEY = 'menu_item';
 
     public $parent = null;
 
@@ -49,6 +52,10 @@ class MenuItem extends \yii\db\ActiveRecord
             'tree' => [
                 'class'         => NestedSetsBehavior::className(),
                 'treeAttribute' => 'tree'
+            ],
+            [
+                'class' => CacheFlush::className(),
+                'key' => [['yii\widgets\FragmentCache', 'menu_item']]
             ]
         ];
     }
