@@ -13,7 +13,7 @@ class Menu extends \yii\easyii\components\API
     {
         $menu = MenuItem::find()->where(['url'=>$slug])->one();
 
-        return $this->formatItem($menu->children);
+        return $this->formatItem($menu ? $menu->children : []);
     }
 
     public function api_menu($slug)
