@@ -27,11 +27,15 @@ class Menu extends \yii\easyii\components\API
     {
         $ret=[];
         foreach ($items as $item) {
-            $ret[]=[
+            $retItem = [
                 'label' => $item->name,
                 'url' => $item->url,
-                'items' => $this->formatItem($item->children)
             ];
+            if(count($item->children)) {
+                $retItem['items'] = $this->formatItem($item->children);
+            }
+
+            $ret[]=$retItem;
         }
         return $ret;
     }
