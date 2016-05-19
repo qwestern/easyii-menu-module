@@ -2,6 +2,7 @@
 
 namespace qwestern\easyii\menu\api;
 use qwestern\easyii\menu\models\MenuItem;
+use yii\helpers\Inflector;
 use yii\widgets\Menu as MenuWidget;
 
 /**
@@ -12,6 +13,13 @@ class Menu extends \yii\easyii\components\API
     public function api_items($slug)
     {
         $menu = MenuItem::find()->where(['url'=>$slug])->one();
+        if(!$menu) {
+            $menuItem = new MenuItem([
+                'name' => Inflector::humanize($slug),
+                'url' => $slug
+            ]);
+            $menuItem->makeRoot();
+        }
 
         return $this->formatItem($menu ? $menu->children : []);
     }
@@ -27,11 +35,15 @@ class Menu extends \yii\easyii\components\API
     {
         $ret=[];
         foreach ($items as $item) {
-            $ret[]=[
+            $retItem = [
                 'label' => $item->name,
                 'url' => $item->url,
-                'items' => $this->formatItem($item->children)
             ];
+            if(count($item->children)) {
+                $retItem['items'] = $this->formatItem($item->children);
+            }
+
+            $ret[]=$retItem;
         }
         return $ret;
     }
