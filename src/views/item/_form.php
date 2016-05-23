@@ -1,7 +1,5 @@
 <?php
 
-use qwestern\easyii\menu\models\Menu;
-use qwestern\easyii\menu\models\MenuItem;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -19,7 +17,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'url')->textInput() ?>
 
-    <?= $form->field($model, 'parent')->dropDownList(ArrayHelper::merge(['' => 'No parent'], ArrayHelper::map($children, 'primaryKey', 'name'))) ?>
+    <?= $model->isNewRecord ? $form->field($model, 'parent')->dropDownList(ArrayHelper::merge(['' => 'No parent'], ArrayHelper::map($children, 'primaryKey', 'name'))) : '' ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
