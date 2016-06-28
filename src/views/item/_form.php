@@ -1,6 +1,6 @@
 <?php
 
-use kartik\typeahead\Typeahead;
+use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -9,9 +9,16 @@ use yii\widgets\ActiveForm;
 /* @var $model qwestern\easyii\menu\models\MenuItem */
 /* @var $form yii\widgets\ActiveForm */
 
-$urls = array_map(function ($url) {
-    return $url->toString();
-}, Yii::$app->routes->getAll());
+// contains urls in form of "json encoded route" => "Item title (Item type)"
+$urlData = [];
+
+foreach (Yii::$app->routes->getAll() as $url) {
+    if ($url->model) {
+        $urlData[json_encode([$url->route, $url->routeParam => ArrayHelper::getValue($url->model, $url->attribute)])] = ArrayHelper::getValue($url->model, $url->titleAttribute, ArrayHelper::getValue($url->model, $url->attribute)) . ' (' . $url->name . ')';
+        continue;
+    }
+    $urlData[json_encode([$url->route])] = $url->name;
+}
 ?>
 
 <div class="menu-item-form">
@@ -20,16 +27,14 @@ $urls = array_map(function ($url) {
 
     <?= $form->field($model, 'name')->textInput() ?>
 
-    <?= $form->field($model, 'url')->widget(Typeahead::classname(), [
-        'dataset' => [
-            [
-                'local' => $urls,
-                'limit' => 10
-            ]
+    <?= $form->field($model, 'route_string')->widget(Select2::className(), [
+        'data' => $urlData,
+        'options' => ['placeholder' => 'Click here to select ...'],
+        'pluginOptions' => [
+            'allowClear' => true,
+            'tags' => true,
         ],
-        'pluginOptions' => ['highlight' => true],
-        'options' => ['placeholder' => 'Start with /'],
-    ]) ?>
+    ]); ?>
 
     <?= $model->isNewRecord ? $form->field($model, 'parent')->dropDownList(ArrayHelper::merge(['' => 'No parent'], ArrayHelper::map($children, 'primaryKey', 'name'))) : '' ?>
 

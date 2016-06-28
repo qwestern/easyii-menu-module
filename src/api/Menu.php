@@ -12,8 +12,8 @@ class Menu extends \yii\easyii\components\API
 {
     public function api_items($slug)
     {
-        $menu = MenuItem::find()->where(['url'=>$slug])->one();
-        if(!$menu) {
+        $menu = MenuItem::find()->where(['route_string'=>$slug])->one();
+        if (!$menu) {
             $menuItem = new MenuItem([
                 'name' => Inflector::humanize($slug),
                 'url' => $slug
@@ -39,7 +39,7 @@ class Menu extends \yii\easyii\components\API
                 'label' => $item->name,
                 'url' => $item->url,
             ];
-            if(count($item->children)) {
+            if (count($item->children)) {
                 $retItem['items'] = $this->formatItem($item->children);
             }
 
