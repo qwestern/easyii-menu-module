@@ -15,7 +15,7 @@ use yii\easyii\behaviors\CacheFlush;
  * @property integer $depth
  * @property integer $tree
  * @property string  $name
- * @property string  $url
+ * @property string  $route_string
  */
 class MenuItem extends \yii\db\ActiveRecord
 {
@@ -24,6 +24,8 @@ class MenuItem extends \yii\db\ActiveRecord
     const CACHE_KEY = 'menu_item';
 
     public $parent = null;
+
+    protected $url;
 
     /**
      * @inheritdoc
@@ -41,9 +43,15 @@ class MenuItem extends \yii\db\ActiveRecord
         return [
             [['lft', 'rgt', 'depth', 'tree'], 'default', 'value' => 0],
             [['name', 'url', 'lft', 'rgt', 'depth'], 'required'],
-            [['name', 'url'], 'string', 'max' => 255],
+            [['name'], 'string', 'max' => 255],
+            [['url', 'route_string'], 'safe'],
             [['lft', 'rgt', 'depth', 'parent'], 'integer'],
         ];
+    }
+
+    public function getUrl()
+    {
+        return is_array(json_decode($this->route_string, true)) ? json_decode($this->route_string, true) : $this->route_string;
     }
 
     public function behaviors()
@@ -80,10 +88,17 @@ class MenuItem extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Name',
-            'url' => 'Url',
+            'url' => 'Url / item',
             'lft' => 'Lft',
             'rgt' => 'Rgt',
             'depth' => 'Depth',
+        ];
+    }
+
+    public function attributeHints()
+    {
+        return [
+            'url' => 'Can contain URL in form of http://google.com or item selected from list'
         ];
     }
 }

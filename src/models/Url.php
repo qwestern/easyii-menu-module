@@ -15,9 +15,13 @@ class Url extends Object
 
     public $attribute;
 
+    public $titleAttribute;
+
     public $updatedAttribute;
 
     public $routeParam;
+
+    public $name;
 
     /**
      * @param bool $scheme

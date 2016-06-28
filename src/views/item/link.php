@@ -15,7 +15,7 @@ $module = $this->context->module->id;
 
         <div class="pull-left">
             <b><?= $model->name ?></b><br/>
-            <span class="menu-link"><?= (empty($model->url) ? "(no link)" : "[{$model->url}]") ?></span>
+            <span class="menu-link"><?= \yii\helpers\Url::to($model->url) ?></span>
         </div>
         <div class="menu-link-actions">
             <?= Html::a('[' . Yii::t('app', 'Edit') . ']', ['/admin/'. $module .'/item/update', 'id' => $model->primaryKey], ['data-pjax' => 0]) ?>
