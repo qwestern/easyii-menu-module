@@ -57,7 +57,7 @@ $('.sortable').sortable({
             }
             var prevItemId = null;
             if(ui.item.prev()) {
-                prevItemId = ui.item.prev().find('.sortable-item-content').data('linkid')
+                prevItemId = ui.item.prev().find('.sortable-item-content').data('linkid');
             }
 
             $.ajax({
