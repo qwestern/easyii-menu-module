@@ -54,6 +54,11 @@ class MenuItem extends \yii\db\ActiveRecord
         return is_array(json_decode($this->route_string, true)) ? json_decode($this->route_string, true) : $this->route_string;
     }
 
+    public function setUrl($url)
+    {
+        $this->route_string = $url;
+    }
+
     public function behaviors()
     {
         return [
