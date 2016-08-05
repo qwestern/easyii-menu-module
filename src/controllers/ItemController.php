@@ -39,6 +39,7 @@ class ItemController extends Controller
     {
 
         $rootItem = MenuItem::findOne($id);
+
         $dataProvider = new ArrayDataProvider([
             'allModels' => $rootItem->children,
         ]);
@@ -48,6 +49,8 @@ class ItemController extends Controller
             'id' => $id,
         ]);
     }
+
+
 
     /**
      * Displays a single MenuItem model.
@@ -78,7 +81,7 @@ class ItemController extends Controller
                 $parent = $this->findModel($model->parent);
                 $model->appendTo($parent);
             }
-
+            Yii::$app->cache->flush();
             return $this->redirect(['index', 'id' => $id]);
         } else {
             return $this->render('create', [
@@ -108,7 +111,7 @@ class ItemController extends Controller
             } else {
                 $model->prependTo($parent);
             }
-
+            Yii::$app->cache->flush();
             Yii::$app->response->format = Response::FORMAT_JSON;
             return true;
         }
@@ -134,6 +137,7 @@ class ItemController extends Controller
     {
         $model = $this->findModel($id);
         $model->deleteWithChildren();
+        Yii::$app->cache->flush();
         return $this->redirect(['index', 'id' => $model->tree]);
     }
 
