@@ -62,7 +62,7 @@ $('.sortable').sortable({
 
             $.ajax({
                 type: "PATCH",
-                url: '{$orderUrl}/' + itemId,
+                url: '{$orderUrl}'+ '/' + itemId,
                 data: {parent_id: parentId, previous_id: prevItemId},
                 success: function(data){
                     $('.menu-link-alert').hide().filter('.alert-info').show();
