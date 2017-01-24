@@ -3,6 +3,7 @@
 namespace qwestern\easyii\menu\routes;
 
 use qwestern\easyii\menu\models\Url;
+use Yii;
 use yii\base\Component;
 use yii\helpers\ArrayHelper;
 
@@ -31,8 +32,14 @@ class Route extends Component
     public function getAll()
     {
         $urls = [];
+
+        $urlManagerRoutes = ArrayHelper::getColumn(Yii::$app->urlManager->rules, 'route');
+
         foreach ($this->classes as $class => $options) {
             if (is_integer($class)) {
+                if (!in_array(preg_replace('/^\//', '', $options['route']), $urlManagerRoutes)) {
+                    continue;
+                }
                 $urls[] = new Url($options);
                 continue;
             }
