@@ -2,7 +2,9 @@
 
 namespace qwestern\easyii\menu\routes;
 
+use app\extensions\articles\models\Item;
 use qwestern\easyii\menu\models\Url;
+use traffic\easyii\lender\models\Lender;
 use Yii;
 use yii\base\Component;
 use yii\helpers\ArrayHelper;
@@ -43,7 +45,13 @@ class Route extends Component
                 $urls[] = new Url($options);
                 continue;
             }
+
             $models = call_user_func([$class, 'find'])->all();
+
+            $models = array_filter($models, function ($item) {
+                return (!$item instanceof Lender && !$item instanceof Item) || ($item instanceof Item && $item->published !== null) || ($item instanceof Lender && $item->status != 0) ;
+            });
+
             $urls = ArrayHelper::merge($urls, array_map(function ($item) use ($options) {
                 return new Url(ArrayHelper::merge($options, [
                     'model' => $item
