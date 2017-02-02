@@ -23,6 +23,9 @@ class MenuItem extends \yii\db\ActiveRecord
 
     const CACHE_KEY = 'menu_item';
 
+    const ACTIVE = 1;
+    const INACTIVE = 0;
+
     public $parent = null;
 
     protected $url;
@@ -44,7 +47,7 @@ class MenuItem extends \yii\db\ActiveRecord
             [['lft', 'rgt', 'depth', 'tree'], 'default', 'value' => 0],
             [['name', 'url', 'lft', 'rgt', 'depth'], 'required'],
             [['name'], 'string', 'max' => 255],
-            [['url', 'route_string'], 'safe'],
+            [['url', 'route_string', 'is_active'], 'safe'],
             [['lft', 'rgt', 'depth', 'parent'], 'integer'],
         ];
     }

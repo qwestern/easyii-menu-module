@@ -35,6 +35,9 @@ class Menu extends \yii\easyii\components\API
     {
         $ret=[];
         foreach ($items as $item) {
+            if (!$item->is_active) {
+                continue;
+            }
             $retItem = [
                 'label' => $item->name,
                 'url' => $item->url,
