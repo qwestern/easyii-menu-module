@@ -49,7 +49,11 @@ class Route extends Component
             $models = call_user_func([$class, 'find'])->all();
 
             $models = array_filter($models, function ($item) {
-                return (!$item instanceof Lender && !$item instanceof Item) || ($item instanceof Item && $item->published !== null) || ($item instanceof Lender && $item->status != 0) ;
+                return (!$item instanceof Lender && !$item instanceof Item)
+                ||
+                ($item instanceof Item && isset($item->published) && $item->published !== null)
+                ||
+                ($item instanceof Lender && isset($item->status) && $item->status != 0) ;
             });
 
             $urls = ArrayHelper::merge($urls, array_map(function ($item) use ($options) {
